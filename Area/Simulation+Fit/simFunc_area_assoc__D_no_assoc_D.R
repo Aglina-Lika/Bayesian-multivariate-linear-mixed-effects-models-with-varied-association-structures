@@ -1,0 +1,140 @@
+## simulation for area sex+year!!!! Old approach 
+
+library(MASS)
+library(nlme)
+library(rstan)
+library(JMbayes)
+library(splines)
+
+N = 100; K = 5; t.max = 15; # number of subject; number of planned repeated measurements per subject, per outcome; maximum time of follow-up
+beta11 = 3.01; beta12 = 0.47;beta13=1.5; # parameters for the linear mixed effects model 1
+beta21 = 2.15; beta22 = 0.91; beta23=1.3; # parameters for the linear mixed effects model 2
+
+sigma2 = 1 # measurement error standard deviation
+
+# association parameter
+alphaA = 0.9; # association parameter - area
+
+# variance-covariance matrix of random effects 
+D = diag(1, nrow=4, ncol=4) 
+
+#####################################################################################
+
+# request the extractFrames_NEW.R
+
+source("extractFrames_NEW.R")
+
+extractFrames<-extractFrames_new
+
+
+#####################################################################################
+
+# define an empty object to save the time that is requested for the STAN model to run
+time_ela<-NULL
+
+# for loop simulate 200 datasets and fit the STAN model to each of these datasets 
+
+for (i in 1:200){
+  
+  set.seed(i+1234)
+  ############
+  # Simulate #
+  ############
+  
+  n <- N  # number of subjects 
+  K <- K  # number of planned repeated measurements per subject 
+  t.max <- t.max # maximum follow-up time
+  
+  # Parameters for the linear mixed effects model 1
+  betas1 <- c("(Intercept)" = beta11, "year" = beta12, "sex"=beta13)
+  # Parameters for the linear mixed effects model 2
+  betas2 <- c("(Intercept)" = beta21, "year" = beta22, "sex"=beta23)
+  
+  sigma.y <- sqrt(sigma2)  # measurement error standard deviation
+  
+  year1 = c(replicate(N, c(0, sort(runif(K-1, 0, t.max))))) # replicate time values for each subject who has values for the 1st outcome   
+  year2 = c(replicate(N, c(0, sort(runif(K-1, 0, t.max))))) # replicate time values for each subject who has values for the 2nd outcome   
+  sex <- sample(c(rep(0, n/2), rep(1, n/2))) # group indicator, i.e., '0' male, '1' female
+  
+  # create a data frame which contains sex, year1 and year2 
+  DF <- data.frame(sex = factor(rep(sex, each = K)), year1, year2)  
+  
+  #####################################################################################
+  # design matrices for the longitudinal measurement model(1 and 2)
+  # but this can be easily generalized
+  
+  X1 <- model.matrix(~ year1 +sex, data = DF)
+  X2 <- model.matrix(~ year2 +sex,  data = DF)
+  Z1 <- model.matrix(~ year1, data = DF)
+  Z2 <- model.matrix(~ year2, data = DF)
+  
+  
+  #####################################################################################
+  
+  # design matrices for the area of the 1st longitudinal outcome at the time of the 2nd longitudinal outcome
+  AextraFormY2 <- list(fixed = ~ -1 + year2 + I((year2)^2/2)+ I(year2 * (sex == 1)),
+                       random = ~ -1 + year2 + I((year2)^2/2),
+                       indFixed = 1:3, indRandom = 1:2)
+  
+  mfXA_derivY2 <- model.frame(terms(AextraFormY2$fixed), data = DF)
+  mfZA_derivY2 <- model.frame(terms(AextraFormY2$random), data = DF)
+  XAderivY2 <- model.matrix(AextraFormY2$fixed, mfXA_derivY2)
+  ZAderivY2 <- model.matrix(AextraFormY2$random, mfZA_derivY2)
+  
+  #####################################################################################
+  #simulate random effects 
+  b <- mvrnorm(n, rep(0, 4), Sigma = D)
+  b <- as.matrix(b)
+  
+  # Simulate longitudinal responses
+  id <- rep(1:n, each = K)
+  eta.y1 <- as.vector(X1 %*% betas1 + rowSums(Z1 * b[id, 1:2])) # underlying value
+  y1 <- rnorm(n * K, eta.y1, sigma.y)
+  
+  
+  auc.y1_m <- as.vector(XAderivY2 %*% betas1[1:3] + rowSums(ZAderivY2 * b[id, 1:2])) # AUC
+  
+  
+  eta.y2 <- as.vector(X2 %*% betas2 + rowSums(Z2 * b[id, 3:4])) + alphaA * auc.y1_m
+  y2 <- rnorm(n * K, eta.y2, sigma.y)
+  
+  
+  #########################################################################
+  # to run the STAN model you need to create a list with all the required tables and vectors
+  Data <- list(n=n,n_RE=4,N1=n*K,ncx1=3,id1=id,RE_ind1=1:2,y1=y1,Z_1=Z1,X1=X1,
+               N2=n*K,ncx2=3,id2=id,RE_ind2=3:4,y2=y2,Z_2=Z2,X2=X2,
+               scale_betas1=10,scale_betas2=10,scale_sigmas=5,scale_diag_D=3,lkj_shape=2,
+               
+               XAderivY2 = XAderivY2,  
+               ZAderivY2 = ZAderivY2,
+               
+               ncXA_derivY2 = ncol(XAderivY2), ncZA_derivY2 = ncol(ZAderivY2))
+  
+  # fit the STAN model 
+  
+  
+  fit <- stan(file = "V://Users//055609(A_Lika)//new codes 2 stat paper//linear time _ separated//area (time +sex)//funcForm_area_sim_assoc_D_no_assoc_D.stan", 
+              data = Data, chains = 4, iter = 2000, thin = 1, 
+              control = list(max_treedepth = 20, adapt_delta = 0.99))
+  
+  # save the time of the STAN model of the i-th simulation 
+  time_ela[i]<-sum(get_elapsed_time(fit))/(60*60) 
+  # save the summary table of the model but only for the parameters specified in the pars
+  summary1 = as.data.frame(summary(fit, 
+                                   pars = c("temp_betas1","temp_betas2","sigma1","sigma2","D"))$summary)
+ 
+  save(summary1, file = paste0("summary_", i, ".RData"))   
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
