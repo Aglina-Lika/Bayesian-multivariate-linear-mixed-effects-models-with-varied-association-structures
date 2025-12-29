@@ -1,4 +1,4 @@
-filenames = as.list(dir(pattern="summary_*"))
+filenames = as.list(dir(path = "Value//V_assoc_D1D2_no_assoc_D1D2", pattern="summary_*"))
 
 
 names(filenames)<-unlist(filenames)
@@ -9,7 +9,7 @@ length(filenames)
 
 for(i in 1:200){
   
-  Fitsummary[i]<-list(get(load(paste(filenames[i]))))
+  Fitsummary[i]<-list(get(load(paste0("Value//V_assoc_D1D2_no_assoc_D1D2//", filenames[i]))))
   
   
 }
@@ -17,6 +17,8 @@ for(i in 1:200){
 
 
 names(Fitsummary) <- names(filenames)
+
+# Create a data frame in which you will insert all the estimated coefficients from the STAN models
 
 df_summary = data.frame(matrix(vector(), 200, 43,
                                dimnames=list(c(), c("RData", 
@@ -109,14 +111,15 @@ for (i in 1:200){
   
 }
 
-save(df_summary,file="value_D1D2_D1D2_no_value.RData")
+save(df_summary,file="Value//gathered_results//ALL_V_assoc_D1D2_no_assoc_D1D2.RData")
 
 
-
+# function that calculates the bias and MSE, respectively
 get_bias = function(estimate, truth) {
   (mean(estimate) - truth)/truth
 }
 get_mse = function(estimate, truth) {
   mean((estimate - truth) ^ 2)
 }
+
 
