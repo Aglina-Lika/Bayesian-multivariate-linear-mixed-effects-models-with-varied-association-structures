@@ -1,6 +1,6 @@
 # Bayesian-multivariate-linear-mixed-effects-models-with-varied-association-structures
 
-This repository includes the code for fitting Bayesian multivariate linear mixed effects models (of 2 continuous longitudinal outcomes $Y_1$ and $Y_2$) assuming that the continuous outcome $Y_2$ (primary outcome of interest) is associated with the outcome $Y_1$ via the random effects and/or different association structures. Specifically, including as time-varying covariates different functional forms of the outcome $Y_1$ in the submodel of $Y_2$: current value of $Y_1$ at time t (V), total cumulative effect (area under the curve) of $Y_1$ until time t (A) or both of them (V+A). 
+This repository includes the code for fitting Bayesian multivariate linear mixed effects models (2 continuous longitudinal outcomes: $Y_1$ and $Y_2$) assuming that the continuous outcome $Y_2$ (primary outcome of interest) is associated with the outcome $Y_1$ via the random effects and/or different association structures. Specifically, including as time-varying covariates different functional forms of the outcome $Y_1$ in the submodel of $Y_2$: current value of $Y_1$ at time t (V), total cumulative effect (area under the curve) of $Y_1$ until time t (A) or both of them (V+A). 
 
 
 Every folder (i.e., Area, Value, and Area and Value) contains these subfolders:  
