@@ -1,5 +1,5 @@
 
-filenames = as.list(dir(pattern="summary_*"))
+filenames = as.list(dir(path = "Area and Value//V_A_D_D", pattern="summary_*"))
 
 
 names(filenames)<-unlist(filenames)
@@ -10,7 +10,7 @@ Fitsummary<-list()
 
 for(i in 1:200){
 
-Fitsummary[i]<-list(get(load(paste(filenames[i]))))
+Fitsummary[i]<-list(get(load(paste0("path = "Area and Value//V_A_D_D"", filenames[i]))))
 
 
 }
@@ -18,6 +18,8 @@ Fitsummary[i]<-list(get(load(paste(filenames[i]))))
 
 
 names(Fitsummary) <- names(filenames)
+
+# Create a data frame in which you will insert all the estimated coefficients from the STAN models
 
 df_summary = data.frame(matrix(vector(), 200, 61,
                         dimnames=list(c(), c("RData", 
@@ -136,18 +138,20 @@ for (i in 1:200){
     }
 
 
-save(df_summary,file="value+area_D_D.RData")
+save(df_summary,file="Area and Value//gathered_results//ALL_V_A_D_D.RData")
 
 
-
+# function that calculates the bias
 get_bias = function(estimate, truth) {
   (mean(estimate) - truth)/truth
 }
+
+# function that calculates the MSE
 get_mse = function(estimate, truth) {
   mean((estimate - truth) ^ 2)
 }
 
-
+# we calculate below the bias, MSE and variance of the value and area, respectively.
 bias_alphaV = round(get_bias(df_summary$mean_alphaV, 1.63),5)
 bias_alphaV
 mse_alphaV = get_mse(df_summary$mean_alphaV, 1.63)
@@ -159,5 +163,6 @@ bias_alphaA
 mse_alphaA = get_mse(df_summary$mean_alphaA, 0.9)
 mse_alphaA
 var(df_summary$mean_alphaA)
+
 
 
