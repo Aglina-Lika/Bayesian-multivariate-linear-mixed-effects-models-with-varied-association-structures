@@ -1,5 +1,5 @@
 
-filenames = as.list(dir(pattern="summary_*"))
+filenames = as.list(dir(path = "Area//A_assoc_D_no_assoc_D", pattern="summary_*"))
 
 
 names(filenames)<-unlist(filenames)
@@ -11,7 +11,7 @@ Fitsummary<-list()
 
 for(i in 1:200){
   
-  Fitsummary[i]<-list(get(load(paste(filenames[i]))))
+  Fitsummary[i]<-list(get(load(paste0("Area//A_assoc_D_no_assoc_D//", filenames[i]))))
   
   
 }
@@ -129,15 +129,16 @@ for (i in 1:200){
 }
 
 
-save(df_summary,file="area_sim_assoc_D_no_assoc_D.RData")
+save(df_summary,file="Area//gathered_results//ALL_A_assoc_D_no_assoc_D.RData")
 
 
 
-
+# function that calculates the bias and MSE, respectively
 get_bias = function(estimate, truth) {
   (mean(estimate) - truth)/truth
 }
 get_mse = function(estimate, truth) {
   mean((estimate - truth) ^ 2)
 }
+
 
