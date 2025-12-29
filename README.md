@@ -5,8 +5,8 @@ This repository includes the code for fitting Bayesian multivariate linear mixed
 
 Every folder (i.e., Area, Value, and Area and Value) contains these subfolders:  
 * **STAN codes:** includes the STAN codes for fitting the desired models. For example in the folder Area we have the STAN codes:
-   - *funcForm_a_assoc_D_no_assoc_D.stan:* a Bayesian multivariate linear mixed effects model where the outcomes are associated only from the random effects assuming a stacked vector of random effects $b_i~MVN(0,D)$ ($\boldsymbol{b}^\top_{i}={(\boldsymbol{b}^\top_{i,1},\boldsymbol{b}^\top_{i,2})} \sim \text{MVN}(\boldsymbol{0},\boldsymbol{D})$) 
-   - *funcForm_a_assoc_D1D2_no_assoc_D1D2.stan:* a Bayesian multivariate linear mixed effects model where the outcomes are not associated at all. Independent random effects (unstacked random effects vector) so that we have $\boldsymbol{b}_{i,1}^\top \sim \text{MVN}(\boldsymbol{0},\boldsymbol{D_1})$ and $\boldsymbol{b}_{i,2}^\top \sim \text{MVN}(\boldsymbol{0},\boldsymbol{D_2})$ 
+   - *funcForm_a_assoc_D_no_assoc_D.stan:* a Bayesian multivariate linear mixed effects model where the outcomes are associated only from the random effects assuming a stacked vector of random effects 
+   - *funcForm_a_assoc_D1D2_no_assoc_D1D2.stan:* a Bayesian multivariate linear mixed effects model where the outcomes are not associated at all. No functional form of $Y_1$ and no correlated random effects.  
    - *funcForm_a_D.stan:* a Bayesian multivariate linear mixed effects model where the outcomes are associated via the random effects and via the area under the curve of the outcome $Y_1$ 
    - *funcForm_a_D1D2.stan:*  a Bayesian multivariate linear mixed effects model where the outcomes are not associated via the random effects but only via the area under the curve of the outcome $Y_1$
 
