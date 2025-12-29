@@ -134,7 +134,7 @@ for (i in 1:200){
 }
 
 
-save(df_summary,file="Area and Value//gathered_results//whole_V_A_D1D2_D.RData")
+save(df_summary,file="Area and Value//gathered_results//ALL_V_A_D1D2_D.RData")
 
 # function that calculated the bias 
 get_bias = function(estimate, truth) {
@@ -159,4 +159,5 @@ bias_alphaA
 mse_alphaA = get_mse(df_summary$mean_alphaA, 0.9)
 mse_alphaA
 var(df_summary$mean_alphaA)
+
 
