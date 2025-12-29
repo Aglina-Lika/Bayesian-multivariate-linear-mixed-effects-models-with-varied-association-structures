@@ -100,7 +100,7 @@ for (i in 1:200){
     
     # fit the STAN model 
     
-    fit <- stan(file = "V://Users//055609(A_Lika)//new codes 2 stat paper//linear time _ separated//value (time+sex)//funcForm_value.stan", 
+    fit <- stan(file = "Value//STAN codes//funcForm_v_D.stan", 
                 data = Data, chains = 4, iter = 2000, thin = 1, 
                 control = list(max_treedepth = 20, adapt_delta = 0.99))
     # save the time of the STAN model of the i-th simulation 
@@ -109,7 +109,8 @@ for (i in 1:200){
     summary = as.data.frame(summary(fit, 
               pars = c("temp_alphaV","temp_betas1","temp_betas2","sigma1","sigma2","D"))$summary)
    
-    save(summary, file = paste0("summary_", i, ".RData"))
+    save(summary, file = paste0("Value//V_D_D//summary_", i, ".RData"))
 }
+
 
 
