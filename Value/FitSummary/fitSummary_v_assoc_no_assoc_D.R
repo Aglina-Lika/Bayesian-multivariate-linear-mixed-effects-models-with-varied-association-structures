@@ -1,5 +1,5 @@
 
-filenames = as.list(dir(path = "Value//V_assoc_D1D2_no_assoc_D1D2", pattern="summary_*"))
+filenames = as.list(dir(path = "Value//V_assoc_D_no_assoc_D", pattern="summary_*"))
 
 names(filenames)<-unlist(filenames)
 
@@ -9,7 +9,7 @@ length(filenames)
 
 for(i in 1:200){
   
-  Fitsummary[i]<-list(get(load(paste0("Value//V_assoc_D1D2_no_assoc_D1D2//", filenames[i]))))
+  Fitsummary[i]<-list(get(load(paste0("Value//V_assoc_D_no_assoc_D//", filenames[i]))))
   
   
 }
@@ -137,6 +137,7 @@ get_bias = function(estimate, truth) {
 get_mse = function(estimate, truth) {
   mean((estimate - truth) ^ 2)
 }
+
 
 
 
