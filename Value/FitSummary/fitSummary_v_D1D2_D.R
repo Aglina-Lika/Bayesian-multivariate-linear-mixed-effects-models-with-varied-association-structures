@@ -134,7 +134,7 @@ for (i in 1:200){
   
 }
 
-save(df_summary,file="Value//gathered_results//V_D1D2_D.RData")
+save(df_summary,file="Value//gathered_results//ALL_V_D1D2_D.RData")
 
 
 
@@ -153,5 +153,6 @@ bias_alphaV
 mse_alphaV = get_mse(df_summary$mean_alphaV, 1.63)
 mse_alphaV
 var(df_summary$mean_alphaV)
+
 
 
