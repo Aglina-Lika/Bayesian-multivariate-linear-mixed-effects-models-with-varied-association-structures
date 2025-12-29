@@ -10,7 +10,7 @@ Fitsummary<-list()
 
 for(i in 1:200){
 
-Fitsummary[i]<-list(get(load(paste0("path = "Area and Value//V_A_D_D"", filenames[i]))))
+Fitsummary[i]<-list(get(load(paste0("path = "Area and Value//V_A_D_D//"", filenames[i]))))
 
 
 }
@@ -163,6 +163,7 @@ bias_alphaA
 mse_alphaA = get_mse(df_summary$mean_alphaA, 0.9)
 mse_alphaA
 var(df_summary$mean_alphaA)
+
 
 
 
