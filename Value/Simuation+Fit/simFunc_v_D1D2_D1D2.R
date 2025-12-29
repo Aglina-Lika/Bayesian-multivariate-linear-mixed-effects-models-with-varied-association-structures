@@ -94,7 +94,7 @@ for (i in 1:200){
   
   # fit the STAN model 
   
-  fit <- stan(file = "Value//STAN codes//funcForm_value_D1D2.stan", 
+  fit <- stan(file = "Value//STAN codes//funcForm_v_D1D2.stan", 
               data = Data, chains = 4, iter = 2000, thin = 1, 
               control = list(max_treedepth = 20, adapt_delta = 0.99))
   # save the time of the STAN model of the i-th simulation 
@@ -106,4 +106,5 @@ for (i in 1:200){
   
   save(summary1, file = paste0("Value//V_D1D2_D1D2//summary_", i, ".RData"))
 }
+
 
