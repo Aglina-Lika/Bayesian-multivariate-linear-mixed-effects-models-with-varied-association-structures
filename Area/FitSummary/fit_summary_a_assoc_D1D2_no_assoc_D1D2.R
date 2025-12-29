@@ -114,7 +114,7 @@ for (i in 1:200){
 }
 
 
-save(df_summary,file="Area/gathered_results//ALL_A_assoc_D1D2_no_assoc_D1D2.RData")
+save(df_summary,file="Area//gathered_results//ALL_A_assoc_D1D2_no_assoc_D1D2.RData")
 
 
 # function that calculates the bias
@@ -126,6 +126,7 @@ get_bias = function(estimate, truth) {
 get_mse = function(estimate, truth) {
   mean((estimate - truth) ^ 2)
 }
+
 
 
 
