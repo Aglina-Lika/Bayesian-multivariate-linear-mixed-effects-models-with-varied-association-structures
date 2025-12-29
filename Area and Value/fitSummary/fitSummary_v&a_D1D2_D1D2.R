@@ -17,6 +17,8 @@ for(i in 1:200){
 
 names(Fitsummary) <- names(filenames)
 
+# Create a data frame in which you will insert all the estimated coefficients from the STAN models
+
 df_summary = data.frame(matrix(vector(), 200, 49,
                                dimnames=list(c(), c("RData", 
                                                     "mean_alphaV","n_eff_alphaV", "Rhat_alphaV",
@@ -143,4 +145,5 @@ bias_alphaA
 mse_alphaA = get_mse(df_summary$mean_alphaA, 0.9)
 mse_alphaA
 var(df_summary$mean_alphaA)
+
 
