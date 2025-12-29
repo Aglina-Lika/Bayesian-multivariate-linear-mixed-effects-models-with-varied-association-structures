@@ -18,6 +18,8 @@ for(i in 1:200){
 
 names(Fitsummary) <- names(filenames)
 
+# Create a data frame in which you will insert all the estimated coefficients from the STAN models
+
 df_summary = data.frame(matrix(vector(), 200, 49,
                                dimnames=list(c(), c("RData", 
                                                     "mean_alphaV","n_eff_alphaV", "Rhat_alphaV",
@@ -121,5 +123,6 @@ get_bias = function(estimate, truth) {
 get_mse = function(estimate, truth) {
   mean((estimate - truth) ^ 2)
 }
+
 
 
